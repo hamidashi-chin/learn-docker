@@ -107,3 +107,59 @@ docker run -v ./src/:/usr/share/nginx/html --name mynginx -p 8080:80 nginx:1.27
 
 ## Dockerfileとは
 
+- Dockerイメージをコード化したもの
+- Dockerfileを読むと構成がわかる
+- オリジナルイメージを作成できる
+- 設定ファイルなども変更できる
+
+## Dockerfileのベストプラクティス
+
+[Docker-docs-ja](https://docs.docker.jp/develop/develop-images/dockerfile_best-practices.html)
+
+### 一時的なコンテナを作成
+- Dockerfileで定義したイメージによって意生成するコンテナは、可能な限り一時的（ephemeral）であるべき
+- 一時的が意味するものは、コンテナとは停止および破棄可能であり、その後も極めて最小限のセットアップと設定により、再構築や置き換えが可能
+
+### 不要なパッケージのインストールを避ける
+- 余計なものは入れずに極力シンプルにする
+- コンテナごとに１つのプロセスだけ実行するのが基本の考え方
+  - Webアプリケーションを作ろうとしたら、下記のように複数のプロセスが必要になる
+    - Webアプリケーションサーバー
+    - DBサーバー
+    - キャッシュサーバー
+    - ・・・
+  - 一つのコンテナに上記等をまとめて入れるのではなく、複数のコンテナで若手立ち上げておいて、コンテナを連携
+
+### レイヤー
+レイヤーが増えるほどファイルが大きくなり、読みづらくなり、ビルドにも時間がかかるので、極力レイヤーの数は最小限にする
+
+### 複数量の引数
+
+- 自分以外が読む時のことも考えて、複数行で記述する
+- 一行が長くなる場合、`\`で改行入れて見やすくできる
+
+```Dockerfile
+RUN apt-get update && apt-get install -y \
+  bzr \
+  cvs \
+  git \
+  mercurial \
+  subversion \
+  && rm -rf /var/lib/apt/lists/*
+```
+
+## RUNとCMDでコマンドを実行する
+
+- RUNもCMDもコマンドを実行する命令
+  - この２つの違いは実行タイミングが異なる
+- RUN：DockerfileからDockerイメージにビルドするときに１回だけ実行するコマンド
+- CMD：Dockerfileができたイメージをコンテナ化する時に実行されるコマンド
+
+### CMD
+- CMDコマンドわかりにくいのでもうちょっと説明
+  - [公式ドキュメント](https://docs.docker.jp/engine/reference/builder.html#cmd)
+- CMDには３つの形式がある
+  - 今回のレクチャーではexec形式だけ覚えておく
+  - exec形式は、必ずコマンドをダブルクォーテーションで括ることに注意
+    - シングルクォーテーションではコマンドとして認識されない
+    - ex) `CMD ["executable", "param1", "param2"]`
