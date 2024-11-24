@@ -164,7 +164,7 @@ RUN apt-get update && apt-get install -y \
     - シングルクォーテーションではコマンドとして認識されない
     - ex) `CMD ["executable", "param1", "param2"]`
 
-### COPYとADD
+### COPYとADDll
 - どっちもファイルをイメージに追加するコマンド
   - ADDはネット経由でも追加できる
   - 基本はローカルからの追加なのでCOPYを推奨
@@ -180,3 +180,9 @@ RUN apt-get update && apt-get install -y \
   - 動作環境（localなど）
 - ただし、直接書き込みなので固定値になってしまう（ユーザーによって変えられない）
 - `ENV DB_USER {user_name}`
+
+## MariaDBを作ってみる
+- Dockerfileの実践演習
+  - 設定ファイルをイメージに入れる
+  - デフォルトデータベースを作る
+  - 固定の環境変数を定義
