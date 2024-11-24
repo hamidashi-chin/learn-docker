@@ -101,6 +101,9 @@ docker run --name mynginx -p 8080:80 nginx:1.27
 
 - オリジナルHTMLを表示してみる
 ```bash
-docker run --name mynginx -p 8080:80 nginx:1.27
+docker run -v ./src/:/usr/share/nginx/html --name mynginx -p 8080:80 nginx:1.27
 ```
+# Dockerfile
+
+## Dockerfileとは
 
