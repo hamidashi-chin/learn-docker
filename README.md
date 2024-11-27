@@ -164,7 +164,7 @@ RUN apt-get update && apt-get install -y \
     - シングルクォーテーションではコマンドとして認識されない
     - ex) `CMD ["executable", "param1", "param2"]`
 
-### COPYとADDll
+### COPYとADD
 - どっちもファイルをイメージに追加するコマンド
   - ADDはネット経由でも追加できる
   - 基本はローカルからの追加なのでCOPYを推奨
@@ -186,3 +186,32 @@ RUN apt-get update && apt-get install -y \
   - 設定ファイルをイメージに入れる
   - デフォルトデータベースを作る
   - 固定の環境変数を定義
+
+# docker-composeを使ったLaravel環境の構築
+
+- まず最初にやることは、docker-compose.ymlの大枠からつくっていくことが大切
+  - まっさらな状態からつくっていく場合、まずざっくり全体像をつくるってことが何より大切
+
+## docker-compose.yml
+
+```yml
+version: "3"
+services:
+  db: 
+    image: mariadb:10.4
+    container_name: "laravel-db"
+    volume:
+      ./data:/var/lib/mysql
+    ports:
+      "3306:3306"
+  php:
+    build: ./php
+    container_name: "laravel-php"
+    volume:
+      ./source:/var/www/html
+    ports:
+      "8080:80"
+```
+- まずは`version`、`services`から記述する
+  - 次に`db`と`php`を記述
+    - その次に、また１つ下のネストにあたる部分を記述していく

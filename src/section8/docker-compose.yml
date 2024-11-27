@@ -1,0 +1,17 @@
+version: "3"
+services:
+  db: 
+    image: mariadb:10.4
+    container_name: "laravel-db"
+    volume:
+      ./data:/var/lib/mysql
+    ports:
+      "3306:3306"
+  php:
+    build: ./php
+    container_name: "laravel-php"
+    volume:
+      ./source:/var/www/html
+    ports:
+      "8080:80"
+
