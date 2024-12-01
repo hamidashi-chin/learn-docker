@@ -215,3 +215,10 @@ services:
 - まずは`version`、`services`から記述する
   - 次に`db`と`php`を記述
     - その次に、また１つ下のネストにあたる部分を記述していく
+
+## Dockerfileの作成
+
+イメージを作成した時点で変更されることのない環境変数等についてはDockerfileに記述すると良い。
+DockerイメージからDockerコンテナになる時点で指定したいものはdocker-compose.ymlに記述する。
+
+## 各種設定ファイルの作成と設定
